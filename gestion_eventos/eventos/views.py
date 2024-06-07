@@ -1,20 +1,37 @@
-from django.shortcuts import render, redirect
-from .forms import FormEvent
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Event
-from django.contrib import messages
+from .forms import EventForm
 
-def view_event(request):
-    form = FormEvent(request.POST or None)
-    events = Event.objects.all()
-
-    if request.method == 'POST' and form.is_valid():
-        try:
+def event_list(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
             form.save()
-            messages.success(request, 'Evento registrado con éxito.')
-            return redirect('eventos')
-        except Exception as e:
-            messages.error(request, f'Ocurrió un error al registrar el evento: {e}')
-        return redirect('eventos')
+    else:
+        form = EventForm()
     
-    return render(request, "eventos/evento_list.html", {'form': form, 'eventos': events})
+    events = Event.objects.all()
+    return render(request, 'eventos/event_list.html', {'form': form, 'events': events})
 
+def edit_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('event_list')
+    else:
+        form = EventForm(instance=event)
+    return render(request, 'eventos/edit_event.html', {'form': form})
+
+
+def confirm_delete_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == 'POST':
+        return redirect('delete_event', pk=pk)
+    return render(request, 'eventos/confirm_delete_event.html', {'event': event})
+
+def delete_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.delete()
+    return redirect('event_list')
