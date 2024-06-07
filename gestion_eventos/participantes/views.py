@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import ParticipantForm
 from .models import Participant
@@ -17,6 +17,16 @@ def participant_list(request):
         except Exception as e:
             messages.error(request, f'Ocurrió un error al registrar el participante: {e}')
     return render(request, "participantes/participant_list.html", {'form': form, 'participants': participants})
+
+def confirm_delete_participant(request, participant_id):
+    participant = get_object_or_404(Participant, id=participant_id)
+    
+    if request.method == 'POST':
+        participant.delete()
+        messages.success(request, 'El participante ha sido eliminado con éxito.')
+        return redirect('participant_list')
+    
+    return render(request, 'participantes/confirm_delete_participant.html', {'participant': participant})
 
 def delete_participant(request, participant_id):
     try:

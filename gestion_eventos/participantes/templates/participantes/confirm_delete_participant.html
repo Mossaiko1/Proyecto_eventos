@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+<h2>¿Estás seguro que deseas eliminar este participante?</h2>
+<p><strong>{{ participant.first_name }} {{ participant.last_name }}</strong></p>
+<p>{{ participant.email }}</p>
+<p>{{ participant.phone_number }}</p>
+<p>Evento: {{ participant.event.name_event }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'participant_list' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

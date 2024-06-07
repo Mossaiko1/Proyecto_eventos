@@ -6,9 +6,11 @@ body {
     color: #ffffff;
 }
 
-header {
+header, footer {
     background-color: rgba(0, 0, 0, 0.7);
-    margin-bottom: 20px;
+    color: #ffffff;
+    padding: 10px 0;
+    text-align: center;
 }
 
 h1, h2 {
@@ -19,6 +21,7 @@ form {
     background-color: rgba(255, 255, 255, 0.1);
     padding: 20px;
     border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 .list-group-item {
@@ -27,7 +30,7 @@ form {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.btn-primary, .btn-secondary, .btn-danger {
+.btn {
     border-radius: 50px;
     transition: all 0.3s ease;
 }
@@ -40,6 +43,7 @@ form {
     font-size: 1.2rem;
     padding: 10px;
     border-radius: 5px;
+    color: #fff;
 }
 
 .nav-link:hover {
@@ -56,16 +60,10 @@ form {
     color: white;
 }
 
-.form-check {
-    display: flex;
-    align-items: center;
-}
-
 .form-check-input {
     width: 1.25em;
     height: 1.25em;
     border-radius: 0.25em;
-    margin-right: 0.5rem;
 }
 
 .form-check-input:checked {
@@ -89,4 +87,13 @@ form {
 .btn-status:not(.inactive) {
     background-color: #28a745;
     border-color: #28a745;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 0.5rem;
 }

@@ -23,39 +23,39 @@
                 {% if participant.status %}Activo{% else %}Inactivo{% endif %}
             </button>
             <a href="{% url 'edit_participant' participant.id %}" class="btn btn-secondary btn-sm">Editar</a>
-            <a href="{% url 'delete_participant' participant.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            <a href="{% url 'confirm_delete_participant' participant.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            <!-- Cambia esta línea si es necesario -->
         </div>
     </li>
     {% endfor %}
 </ul>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-status').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const participantId = this.getAttribute('data-id');
-            const currentStatus = this.getAttribute('data-status') === 'true';
-            const newStatus = !currentStatus;
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-status').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const participantId = this.getAttribute('data-id');
+                const currentStatus = this.getAttribute('data-status') === 'true';
+                const newStatus = !currentStatus;
 
-            fetch("{% url 'change_status' %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: `id=${participantId}&status=${newStatus}`
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    this.classList.toggle('inactive', !newStatus);
-                    this.setAttribute('data-status', newStatus);
-                    this.textContent = newStatus ? 'Activo' : 'Inactivo';
-                } else {
-                    alert('Error al cambiar el estado.');
-                }
+                fetch("{% url 'change_status' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: `id=${participantId}&status=${newStatus}`
+                }).then(response => response.json()).then(data => {
+                    if (data.success) {
+                        this.classList.toggle('inactive', !newStatus);
+                        this.setAttribute('data-status', newStatus);
+                        this.textContent = newStatus ? 'Activo' : 'Inactivo';
+                    } else {
+                        alert('Error al cambiar el estado.');
+                    }
+                });
             });
         });
     });
-});
 </script>
 {% endblock %}
-

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Event
 from .forms import EventForm
+from django.contrib import messages
 
 def event_list(request):
     if request.method == 'POST':
@@ -25,13 +26,18 @@ def edit_event(request, event_id):
     return render(request, 'eventos/edit_event.html', {'form': form})
 
 
-def confirm_delete_event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
+def confirm_delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    
     if request.method == 'POST':
-        return redirect('delete_event', pk=pk)
-    return render(request, 'eventos/confirm_delete_event.html', {'event': event})
+        event.delete()
+        messages.success(request, 'El evento ha sido eliminado con éxito.')
+        return redirect('event_list')
+    
+    return render(request, 'eventos/confirm_delete.html', {'event': event})
 
-def delete_event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
     event.delete()
+    messages.success(request, 'El evento ha sido eliminado con éxito.')
     return redirect('event_list')
